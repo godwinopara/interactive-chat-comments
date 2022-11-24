@@ -61,8 +61,34 @@ const chatSlice = createSlice({
     addComment(state, action) {
       state.comments.push(action.payload);
     },
+    incrementScore(state, action) {
+      const comment = state.comments.find((comment) => comment.id === action.payload);
+      comment.score += 1;
+    },
+    decrementScore(state, action) {
+      const comment = state.comments.find((comment) => comment.id === action.payload);
+      comment.score -= 1;
+    },
+    replyIncrementScore(state, action) {
+      const { commentId, replyId } = action.payload;
+      const comment = state.comments.find((comment) => comment.id === commentId);
+      const commentReplies = comment.replies.find((commentReply) => commentReply.id === replyId);
+      commentReplies.score += 1;
+    },
+    replyDecrementScore(state, action) {
+      const { commentId, replyId } = action.payload;
+      const comment = state.comments.find((comment) => comment.id === commentId);
+      const commentReplies = comment.replies.find((commentReply) => commentReply.id === replyId);
+      commentReplies.score -= 1;
+    },
   },
 });
 
-export const { addComment } = chatSlice.actions;
+export const {
+  addComment,
+  incrementScore,
+  decrementScore,
+  replyDecrementScore,
+  replyIncrementScore,
+} = chatSlice.actions;
 export default chatSlice.reducer;

@@ -4,7 +4,7 @@ import UserCommentInfo from "./UserCommentInfo";
 const Comment = ({ image, username, createdAt, content }) => {
   return (
     <>
-      <div>
+      <div className="w-full">
         <div className="flex justify-between items-center mb-5">
           <UserCommentInfo image={image} username={username} createdAt={createdAt} />
           <ButtonReply />

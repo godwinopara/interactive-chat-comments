@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import Comment from "./Comment";
+import RepliesScore from "./RepliesScore";
 import Score from "./Score";
 
 const UsersComment = () => {
@@ -7,11 +8,11 @@ const UsersComment = () => {
   return (
     <>
       {comments.map((comment) => {
-        const { score, username, image, createdAt, content } = comment;
+        const { id, score, username, image, createdAt, content } = comment;
         return (
-          <div key={comment.id}>
+          <div key={id}>
             <div className="flex items-start bg-white my-8 py-8 px-7 rounded-xl">
-              <Score score={score} />
+              <Score score={score} id={id} />
               <Comment username={username} image={image} createdAt={createdAt} content={content} />
             </div>
             <div className="comments">
@@ -22,7 +23,7 @@ const UsersComment = () => {
                     px-7 rounded-xl w-[85%] ml-auto"
                     key={reply.id}
                   >
-                    <Score score={reply.score} />
+                    <RepliesScore score={reply.score} commentId={id} replyId={reply.id} />
                     <Comment
                       username={reply.username}
                       image={reply.image}
