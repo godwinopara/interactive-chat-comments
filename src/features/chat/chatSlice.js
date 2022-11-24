@@ -30,7 +30,7 @@ const initialState = {
       username: "maxblagun",
       replies: [
         {
-          id: 3,
+          id: 1,
           content:
             "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
           createdAt: "1 week ago",
@@ -40,7 +40,7 @@ const initialState = {
           username: "ramsesmiron",
         },
         {
-          id: 4,
+          id: 2,
           content:
             "I couldn't agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
           createdAt: "2 days ago",
@@ -61,6 +61,12 @@ const chatSlice = createSlice({
     addComment(state, action) {
       state.comments.push(action.payload);
     },
+    addReply(state, action) {
+      const { commentId, reply } = action.payload;
+      const comment = state.comments.find((comment) => comment.id === commentId);
+      comment.replies.push(reply);
+    },
+
     incrementScore(state, action) {
       const comment = state.comments.find((comment) => comment.id === action.payload);
       comment.score += 1;
@@ -86,6 +92,7 @@ const chatSlice = createSlice({
 
 export const {
   addComment,
+  addReply,
   incrementScore,
   decrementScore,
   replyDecrementScore,
