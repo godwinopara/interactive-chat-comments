@@ -58,8 +58,17 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    deleteComment(state, action) {
+      const { commentId } = action.payload;
+      state.comments = state.comments.filter((comment) => comment.id !== commentId);
+    },
     addComment(state, action) {
       state.comments.push(action.payload);
+    },
+    deleteReply(state, action) {
+      const { commentId, replyId } = action.payload;
+      const comment = state.comments.find((comment) => comment.id === commentId);
+      comment.replies = comment.replies.filter((reply) => reply.id !== replyId);
     },
     addReply(state, action) {
       const { commentId, reply } = action.payload;
@@ -91,8 +100,10 @@ const chatSlice = createSlice({
 });
 
 export const {
+  deleteComment,
   addComment,
   addReply,
+  deleteReply,
   incrementScore,
   decrementScore,
   replyDecrementScore,

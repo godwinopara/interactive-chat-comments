@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addReply } from "../../features/chat/chatSlice";
+import { addReply, deleteComment } from "../../features/chat/chatSlice";
 import ChatInput from "../utils/ChatInput";
 import Comment from "./Comment";
 import Score from "./Score";
@@ -11,7 +11,9 @@ const CommentWrapper = ({ id, score, username, image, createdAt, content }) => {
   const currentUser = useSelector((state) => state.chat.currentUser);
   const comments = useSelector((state) => state.chat.comments);
   const dispatch = useDispatch();
-  const comment = useRef();
+
+  // comment input
+  const commentInput = useRef();
 
   const showReplyCommentInput = () => {
     setShowInput((prevState) => !prevState);
@@ -28,14 +30,26 @@ const CommentWrapper = ({ id, score, username, image, createdAt, content }) => {
       commentId: id,
       reply: {
         id: randomId(),
-        content: comment.current.value,
+        content: commentInput.current.value,
         score: 0,
         image: currentUser.image,
         username: currentUser.username,
       },
     };
     dispatch(addReply(payload));
-    comment.current.value = "";
+    console.log(commentInput.current.value);
+    commentInput.current.value = "";
+  };
+
+  const deleteUserComment = () => {
+    dispatch(deleteComment({ commentId: id }));
+  };
+
+  const editUserComment = () => {
+    const commentToEdit = comments.filter((comment) => comment.id === id);
+    // commentInput.textContent = commentToEdit.content;
+    console.log(commentInput.current.placeholder);
+    // setShowInput((prevState) => !prevState);
   };
 
   return (
@@ -48,9 +62,12 @@ const CommentWrapper = ({ id, score, username, image, createdAt, content }) => {
           createdAt={createdAt}
           content={content}
           replyComment={showReplyCommentInput}
+          id={id}
+          deleteComment={deleteUserComment}
+          editComment={editUserComment}
         />
       </div>
-      {showInput && <ChatInput ref={comment} submitComment={submitComment} />}
+      {showInput && <ChatInput ref={commentInput} submitComment={submitComment} />}
     </>
   );
 };
